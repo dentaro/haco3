@@ -1,9 +1,6 @@
 # o-bako Simulator
 
-o-bako のシミュレータです。
-ブラウザで動作します。
+# haco3 Simulator
 
-https://inajob.github.io/o-bako-simulator/index.html で動作を確認できます。
-
-
-Luaの実行のために https://fengari.io/ を利用しています。
+o-bakoシミュレータのレイアウトをhaco3仕様に直しただけのものです。 
+エディター作成のためにaceを利用しています。 Luaの実行のために https://fengari.io/ を利用しています。
