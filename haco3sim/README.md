@@ -1,5 +1,3 @@
-# o-bako Simulator
-
 # haco3 Simulator
 
 o-bakoシミュレータのレイアウトをhaco3仕様に直しただけのものです。 
