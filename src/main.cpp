@@ -89,22 +89,29 @@ hw_timer_t * timer = NULL;
 
 // 画面描画タスクハンドル
 TaskHandle_t taskHandle;
+//描画待ち用セマフォ
+volatile SemaphoreHandle_t semaphore;
+
+// bool spriteReadyF = false;
 
 // 画面描画タスク
 void dispTask(void *pvParameters) {
   while (1) {
-  // tft.fillScreen(TFT_RED);
+    xSemaphoreTake(semaphore, portMAX_DELAY);
 
-  if(flip){
-    tft.pushSprite(&layoutSprite,0,0);
-    ui.showTouchEventInfo( layoutSprite, 120, 0 );//タッチイベントを視覚化する
-    ui.showInfo( layoutSprite, 0, 0 );//ボタン情報、フレームレート情報などを表示します。
-    layoutSprite.pushAffine(matrix_bg);
-  }else{
-  }
-  
-  flip = !flip;//描画は2フレにつき１回行う
-  }
+      if(flip){
+        
+        tft.pushSprite(&layoutSprite,0,0);
+        ui.showTouchEventInfo( layoutSprite, 120, 0 );//タッチイベントを視覚化する
+        ui.showInfo( layoutSprite, 0, 0 );//ボタン情報、フレームレート情報などを表示します。
+        layoutSprite.pushAffine(matrix_bg);
+
+      }else{
+
+      }
+      flip = !flip;//描画は2フレにつき１回行う
+    }
+    delay(1);
 }
 
 // タイマー割り込み
@@ -122,6 +129,9 @@ void setup()
   timerAttachInterrupt(timer, &onTimer, true);
   timerAlarmWrite(timer, 1000000, true);
   timerAlarmEnable(timer);
+
+  // バイナリセマフォ作成
+  semaphore = xSemaphoreCreateBinary();
 
   // 描画用タスク作成
   xTaskCreateUniversal(
@@ -167,25 +177,9 @@ void setup()
   layoutSprite.createSprite( 128, 128 );
   tft.setPsram( false );//DMA利用のためPSRAMは切る
   tft.createSprite( 128, 128 );
-  // tft2.setPsram( false );//DMA利用のためPSRAMは切る
-  // tft2.createSprite( 128, 128 );
   // screen.startWrite();//CSアサート開始
   layoutSprite.startWrite();//CSアサート開始
   // tft.startWrite();//CSアサート開始
-  // tft2.startWrite();//CSアサート開始
-  
-  // pinMode(39, INPUT_PULLUP);//ボタン設定は後で
-  // pinMode(23, INPUT_PULLUP);
-  // pinMode(34, INPUT_PULLUP);
-  // pinMode(35, INPUT_PULLUP);
-
-  // pinMode(17, INPUT_PULLUP);
-  // pinMode(16, INPUT_PULLUP);
-  // pinMode(4, INPUT_PULLUP);
-
-  // pinMode(36, INPUT_PULLUP);
-  // pinMode(25, INPUT_PULLUP);
-  // pinMode(22, INPUT_PULLUP);
 
   // game =  new RunLuaGame();//元はこっち
   game =  new BaseGame();//これしか通らない
@@ -208,15 +202,13 @@ void setup()
 }
 
 void loop() {
-  ui.update(screen);//タッチイベントを取るので、LGFXが基底クラスでないといけない
 
-  
+  ui.update(screen);//タッチイベントを取るので、LGFXが基底クラスでないといけない
   if( ui.getEvent() != NO_EVENT ){//何かイベントがあれば
-    
     if( ui.getEvent() == TOUCH ){//TOUCHの時だけ
 
     }
-    
+
     if(ui.getEvent() == MOVE){
       pressedBtnID = ui.getTouchBtnID();
     }
@@ -227,44 +219,38 @@ void loop() {
     }
   } 
 
-  // //ゲーム
-  // //----------
+  //ゲーム
   uint32_t now = millis();
   uint32_t remainTime = (now - preTime);
+
   preTime = now;
 
-  if(wifiGame){ // debug mode
-    int r = wifiGame->run(remainTime);
-    if(r != 0){
-      tunes.pause();
-      game->pause();
-      free(game);
-      game = new RunLuaGame();
-      game->init();
+  // if(wifiGame){ // debug mode
+  //   int r = wifiGame->run(remainTime);
+  //   if(r != 0){
+  //     tunes.pause();
+  //     game->pause();
+  //     free(game);
+  //     game = new RunLuaGame();
+  //     game->init();
       
-      tunes.resume();
+  //     tunes.resume();
       
-    }
-  }
-  tunes.run();
+  //   }
+  // }
 
+  tunes.run();
   int mode = game->run(remainTime);
 
+  //違うゲームが選ばれた時はこの処理を通る？
   if(mode != 0){
-    tunes.pause();
+    tunes.pause();//一旦とめて
     game->pause();
     free(game);
-    game = new RunLuaGame();
-    game->init();
-    tunes.resume();
+    game = new RunLuaGame();//新しいゲームオブジェクトを作る
+    game->init();//初期化して
+    tunes.resume();//再開
   }
 
-  // if(flip){
-  //   tft.pushSprite(&layoutSprite,0,0);
-  //   ui.showTouchEventInfo( layoutSprite, 120, 0 );//タッチイベントを視覚化する
-  //   ui.showInfo( layoutSprite, 0, 0 );//ボタン情報、フレームレート情報などを表示します。
-  // }else{
-  // }
-  // layoutSprite.pushAffine(matrix_bg);
-  // flip = !flip;//描画は2フレにつき１回行う
+  xSemaphoreGiveFromISR(semaphore, NULL);
 }

@@ -43,6 +43,7 @@ extern "C" {
     return ret;
   }
 }
+
 int RunLuaGame::loadSurface(File *fp, uint8_t* buf){
   uint8_t c;
   unsigned long offset;
@@ -74,7 +75,6 @@ int RunLuaGame::loadSurface(File *fp, uint8_t* buf){
   fp->read((uint8_t*)&height, 4);
   fp->seek(2, SeekCur); // skip biPlanes
   fp->read((uint8_t*)&bitCount, 2);
-
 
   Serial.println("pre check");
   if(width != 128){
@@ -116,6 +116,7 @@ int RunLuaGame::loadSurface(File *fp, uint8_t* buf){
   }
   return 0;
 }
+
 int RunLuaGame::l_tone(lua_State* L){
   RunLuaGame* self = (RunLuaGame*)lua_touserdata(L, lua_upvalueindex(1));
   int n = lua_tointeger(L, 1);
@@ -169,6 +170,7 @@ int RunLuaGame::l_spr(lua_State* L){
   }
   return 0;
 }
+
 int RunLuaGame::l_scroll(lua_State* L){
   RunLuaGame* self = (RunLuaGame*)lua_touserdata(L, lua_upvalueindex(1));
   int x = lua_tointeger(L, 1);
@@ -658,7 +660,8 @@ void RunLuaGame::resume(){
 
   SPIFFS.begin(true);
 
-  if(SPIFFS.exists(getBitmapName(fileName))){
+  //スプライト画像の取得
+  if(SPIFFS.exists(getBitmapName(fileName))){//sprite.bpmがあれば
     File bmpFile = SPIFFS.open(getBitmapName(fileName) , FILE_READ);
     Serial.println("bitmap load begin");
     if(loadSurface(&bmpFile, (uint8_t*)surface) != 0){
@@ -673,7 +676,7 @@ void RunLuaGame::resume(){
 
   File fp = SPIFFS.open(fileName, FILE_READ);
 
-  tft.fillScreen(TFT_BLACK);
+  // tft.fillScreen(TFT_BLACK);
   struct LoadF lf;
   lf.f = fp;
   char cFileName[32];
