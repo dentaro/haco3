@@ -1,6 +1,9 @@
 # haco3
 letro_game_engin for esp32 
 
+こちらはlua版です。
+JavaScript版はこちらです。https://github.com/dentaro/haco3_JS
+
 「ハコさん」というキャラが大活躍する（はずの）esp32で動くレトロゲームエンジンを開発中です。
 
 ビルドオプションの設定などが必要なため、インストールはplatformIOでしかできません。（Arduino不可）
