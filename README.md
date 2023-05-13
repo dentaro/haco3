@@ -9,11 +9,10 @@ ina_aniさんのo-bakoをlovyanGFXに移植し、タッチパネル対応にす�
 
 https://inajob.github.io/o-bako-simulator/index.html
 
-o-bakoのプログラムに互換性があります。（つまり、こちらのサイトで開発したゲームは動かせます）
 
 JavaScript言語(Duktape)とLua5.3が動いていて、
 
-JavaScriptを充実させていくつもりですが、JavaScript & Luaのどちらでも開発ができます。（data内のサンプルゲーム.jsと.luaを参照してください。）
+JavaScriptも充実させていくつもりですが、JavaScript & Luaのどちらでも開発ができます。（data内のサンプルゲーム.jsと.luaを参照してください。）
 
 下のサイトで紹介されている、2432S028Rというタッチパネルでうごく設定を公開しています。
 
