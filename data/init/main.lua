@@ -1,128 +1,206 @@
--- --<幻覚の森から>
---     --リセットスタートを押してから矢印キーでハコさんが歩きます。ところが森に入ると、、、。ハコさんこのあとどうする？！
---     --保存ができないので、ブラウザで編集せずに、編集、保存したものをコピペして実行するのがおすすめです。
---     x = 0
---     y = 32
---     t = 0
---     flip = 0
---     count = 0
+--  launcher
+-- count = 0
+-- color(12)
+count = 0
 
---     function setup()
---         color(0,0,0)
---         fillrect(0,0,128,128)
--- 	--森の背景を描く
---         for i = 0 , 15 do
---             for j = 0 , 15 do
---         	spr(i*8, j*8, 8, 8, 16, 8)
---         	end
---         end
---     end
+fs = list() --落ちる
 
---     function loop()
---       t = t + 1
+cursor = 0
+scroll = 0
+tabCursor = 0
+showmax = 7 --ファイルの最大表示数0~
+lineheight = 11
+function setup()
 
---       walk = 0
---       step = 1 --ここを変えると歩くスピードが変わります
+end
 
---       if btn(0) > 0 then x = x - step  walk = 1 tone(0, 600, 32) count = 0 end--ここの600は音の高さを表しています
---       if btn(1) > 0 then x = x + step  walk = 1 tone(0, 800, 32) count = 0 end
---       if btn(2) > 0 then y = y - step  walk = 1 tone(0, 1000, 32) count = 0 end
---       if btn(3) > 0 then y = y + step  walk = 1 tone(0, 2000, 32) count = 0 end
---       count = count + 1
---     --   count = count%10
---       if count >= 3 then tone(0, 440, 0) end
+function _init()
+  -- fs = list()
+end
 
---       if
---                 x > 128  then x = -8
---         elseif  x < -8  then  x = 128
---         elseif  y > 120  then y = -8
---         elseif  y < -8  then  y = 120
---       end
---       --背景を描きなおす
---       for i = 0 , 10 do
---             for j = 0 , 10 do
---         	spr(i*8, j*8, 8, 8, 8, 8) --ここを変えると背景を変えられます。
---         	end
---         end
 
---       if walk == 1 then
+function drawTab(x, y, w)
+  spr(x, y,8,8,32,0,8,8) -- left
+  for i = 1,w do
+    spr(x + i*8, y,8,8,40,0,8,8) -- middle
+  end
+  spr(x + w*8 ,y,8,8,48,0,8,8) -- right
+end
 
---        if t%3 == 0 then
---         flip = flip + 1
---         flip = flip%2
---        end
+function drawDisableTab(x, y, w)
+  spr(x, y,8,8,32,8,8,8) -- left
+  for i = 1,w do
+    spr(x + i*8, y,8,8,40,8,8,8) -- middle
+  end
+  spr(x + w*8 ,y,8,8,48,8,8,8) -- right
+end
 
---        if flip == 0 then spr(x, y, 8, 8, 16, 0) end
---        if flip == 1 then spr(x, y, 8, 8, 24, 0) end
+function drawTile(x, y, w, h)
+  for i=0,h-1 do
+    for j=0,w-1 do
+      spr(x + j*8, y + i*8,8,8,40,24,8,8)
+    end
+  end
+end
 
---       else
---        spr(x, y, 8, 8, 8, 0) --ここを変えるとキャラの絵を変えられます
---       end
+function drawFile()
+  drawTab(0,10,4)
+  color(1)
+  text("file", 12, 10)
 
---     end
+  drawDisableTab(40,10,4)
+  color(1)
+  text("util", 52, 9)
 
---<ハコさんがハコファイターに！？>
-      --リセットスタートを押してから矢印キーでハコさんがハコファイターに！？　ハコさんこのあとどうする？！
-      --保存ができないので、ブラウザで編集せずに、編集、保存したものをコピペして実行するのがおすすめです。
-      x = 0
-      y = 32
-      t = 0
-      flip = 0
-      count = 0
+  for i = scroll,#fs do
+    if i - scroll >= 0 and i - scroll <= showmax then
+      v = fs[i] --パス名
+      -- text(i .. v, 10, 20 + lineheight * (i-scroll))--先頭数字
+      text(v, 10, 20 + lineheight * (i-scroll))--先頭数字なし
+    end
+  end
 
-      function setup()
-          color(0,0,0)
-          fillrect(0,0,128,128)
-    --森の背景を描く
-          for i = 0 , 15 do
-              for j = 0 , 15 do
-            spr(i*8, j*8, 8, 8, 8*5, 8*13)
-            end
-          end
+  spr(0, 20 + (cursor-scroll)*lineheight, 8, 8, 32, 16, 8, 8)
+
+  if btn(3) == 2 then
+    cursor = cursor - 1
+    if cursor < 0 then
+      cursor = #fs
+    end
+  end
+
+  if btn(4) == 2 then
+    cursor = cursor + 1
+    if cursor > #fs then
+      cursor = 0
+    end
+  end
+
+  if cursor < scroll then
+    scroll = cursor
+  end
+  if cursor > showmax then
+    scroll = cursor - showmax
+  end
+
+  if btn(1) == 2 then
+    run(fs[cursor])
+  end
+end
+
+utilMenu = {"reload", "wifi on", "self wifi on", "reboot", "tone on", "tone off"}
+
+function drawUtil()
+  drawDisableTab(0,10,4)
+  color(1)
+  text("file", 12, 9)
+
+  drawTab(40,10,4)
+  color(1)
+  text("util", 52, 10)
+
+  for k, v in pairs(utilMenu) do
+    text((k - 1) .. ":" .. v, 10, 20 + 10 * (k - 1))
+  end
+  --fillrect(0, 20 + cursor * 10, 10, 10)
+  spr(0, 20 + cursor*10, 8, 8, 32, 16, 8, 8)
+
+  if btn(3) == 2 then
+    cursor = cursor - 1
+    if cursor < 0 then
+      cursor = #utilMenu - 1
+    end
+  end
+
+  if btn(4) == 2 then
+    cursor = cursor + 1
+    if cursor >= #utilMenu then
+      cursor = 0
+    end
+  end
+
+  if btn(1) == 2 then
+    if cursor == 0 then
+      run("/init/main.lua")
+    elseif cursor == 1 then
+     --ATPモード：共有のWifiに入るモード（通常はこちら/init/param/wifipass.txtを書き換えることで設定できる）
+      if not(iswifidebug()) then
+        wifiserve()
       end
-
-      function loop()
-          color(0,0,0)
-          fillrect(0,0,128,128)
-        t = t + 1
-
-        walk = 0
-        step = 1 --ここを変えるとスピードが変わります
-
-        if btn(0) > 0 then x = x - step  walk = 1 tone(0, 600, 32) count = 0 end--ここの600は音の高さを表しています
-        if btn(1) > 0 then x = x + step  walk = 1 tone(0, 800, 32) count = 0 end
-        if btn(2) > 0 then y = y - step  walk = 1 tone(0, 1000, 32) count = 0 end
-        if btn(3) > 0 then y = y + step  walk = 1 tone(0, 2000, 32) count = 0 end
-        count = count + 1
-      --   count = count%10
-        if count >= 3 then tone(0, 440, 0) end
-
-        if
-                  x > 128  then x = -8
-          elseif  x < -8  then  x = 128
-          elseif  y > 120  then y = -8
-          elseif  y < -8  then  y = 120
-        end
-        --背景を描きなおす
-        for i = 0 , 10 do
-              for j = 0 , 10 do
-              --ここを変えると背景を変えられます。スプライトを0から数えて１番目の下13行目(8*1, 8*13)という意味です。
-            spr(i*8, j*8, 8, 8, 8*1, 8*13)
-            end
-          end
-
-        if walk == 1 then
-
-         if t%3 == 0 then
-          flip = flip + 1
-          flip = flip%2
-         end
-
-         if flip == 0 then spr(x, y, 8, 8, 8*4, 8*14) end
-         if flip == 1 then spr(x, y, 8, 8, 8*4, 8*14) end
-
-        else
-         spr(x, y, 8, 8, 8*1, 8*0) --ここを変えるとキャラの絵を変えられます
-        end
-
+    elseif cursor == 2 then
+     --APモード：ESP32自体がアクセスポイントになるモード
+      if not(iswifidebug()) then
+        wifiserve("ap")
       end
+    elseif cursor == 3 then
+      reboot()
+    elseif cursor == 4 then
+     --  tone(0, 523)
+     --  tone(1, 659)
+      -- tone(2, 784)
+    elseif cursor == 5 then
+      -- tone(0, 0)
+      -- tone(1, 0)
+      -- tone(2, 0)
+    end
+  end
+end
+
+function _update()
+  color(1)
+  fillrect(0, 0, 128, 120)
+  color(7)
+  if iswifidebug() then
+    text("wifi: on", 0, 0)
+    text(getip(), 50, 0)
+  else
+    text("wifi: off", 0, 0)
+  end
+
+  if btn(0) == 2 then
+    tabCursor = tabCursor - 1
+    if tabCursor < 0 then
+      tabCursor = 1
+    end
+    cursor = 0
+  end
+  if btn(2) == 2 then
+    tabCursor = tabCursor + 1
+    if tabCursor > 1 then
+      tabCursor = 0
+    end
+    cursor = 0
+  end
+
+  drawTile(0,18,16,12)
+
+  if tabCursor == 0 then
+    drawFile()
+  else
+    drawUtil()
+  end
+  count = count + 1
+end
+
+-- function _draw()
+--   drawTile(0,18,16,12)
+--   if tabCursor == 0 then
+--     drawFile()
+--   else
+--     drawUtil()
+--   end
+-- end
+
+-------------------------------------------------------
+firstF = true
+function setup()--使えず、、、、
+end
+
+function loop()--update --draw
+if firstF == true then
+  _init()
+  firstF = false
+end
+_update()
+-- _draw()
+end
