@@ -1,24 +1,16 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <FS.h>
-
-// #ifdef M5STACK
-// #include "M5Stack.h"
-// #else
-// #include <TFT_eSPI.h>
-// #endif
-
+#include <LovyanGFX_DentaroUI.hpp>
 #include "SPIFFS.h"
 #include "baseGame.h"
 #include "Tunes.h"
-// #include "shiro.h"
-#include <LovyanGFX_DentaroUI.hpp>
-// #include <LovyanGFX.h>
+
 
 #ifndef WIFI_GAME_H
 #define WIFI_GAME_H
 
-#define MAX_CHAR 256
+#define MAX_CHAR 4096//256
 
 class WifiGame
 {
@@ -39,7 +31,7 @@ class WifiGame
     WiFiServer server;
     WifiGame():server(80){
     }
-    int buttonState[7];
+    int buttonState[CTRLBTNNUM];
     void init(bool);
     int initSTA();
     String randomString(String prefix, int n);

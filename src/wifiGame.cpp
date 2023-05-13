@@ -1,8 +1,12 @@
 #include "wifiGame.h"
+// #include <LovyanGFX_DentaroUI.hpp>
 #include <Preferences.h>
 extern Tunes tunes;
+// LGFX tft;
 extern MyTFT_eSprite tft;
+// extern LGFX_Sprite tft;
 extern int* buttonState;
+// extern wifiDebugRequest;
 
 Preferences preferences;
 
@@ -18,11 +22,23 @@ void WifiGame::init(bool isSelf){
   this->resume();
 }
 
-int WifiGame::initSTA()
-{
-  preferences.begin("wifi-config");
+int WifiGame::initSTA(){
   String ssid = preferences.getString("WIFI_SSID");
   String password = preferences.getString("WIFI_PASSWD");
+
+  File fr = SPIFFS.open(WIFIPASS_FILE, "r");// ⑩ファイルを読み込みモードで開く
+  for(int i= 0;i<2;i++){//
+  String _readStr = fr.readStringUntil(',');// ⑪,まで１つ読み出し
+    if(i==0){
+      ssid = _readStr;
+      // preferences.putString("WIFI_SSID", ssid);
+      }else if(i==1){
+      password = _readStr;
+      // preferences.putString("WIFI_PASSWD", password);
+      }
+  }
+  fr.close();	// ⑫	ファイルを閉じる
+  
   preferences.end();
 
   WiFi.disconnect(true);
@@ -39,11 +55,11 @@ int WifiGame::initSTA()
   tft.setCursor(0, 20);
   tft.print(ssid);
 
-// #ifdef M5STACK
-//   // tft.drawObako();
-// #else
+#ifdef M5STACK
+  tft.drawObako();
+#else
   tft.pushSprite(0, 0);
-// #endif
+#endif
 
   while(WiFi.status() != WL_CONNECTED){
     delay(500);
@@ -56,10 +72,8 @@ int WifiGame::initSTA()
 
   tft.setCursor(0, 30);
   tft.print(WiFi.localIP());
-
-  // return 0;//リターンエラー回避のためのダミー
+  return 0;
 }
-
 String WifiGame::randomString(String prefix, int n){
   String ret = prefix;
   for(int i = 0; i < n; i ++){
@@ -96,16 +110,15 @@ void WifiGame::initAP(){
   tft.setCursor(0, 40);
   tft.print(password);
 
-
   tft.setCursor(0, 50);
   tft.print(WiFi.softAPIP().toString());
 }
 
 void WifiGame::assignSetting(String* key, String* value, String* ssid, String* password){
-  if(*key == "ssid"){
+  if(*key == "WIFIID"){
     *ssid = *value;
   }
-  if(*key == "password"){
+  if(*key == "WIFIPASS"){
     *password = *value;
   }
 }
@@ -133,32 +146,32 @@ void WifiGame::getHandler(WiFiClient *c, String path){
     c->println("HTTP/1.1 200 OK");
     c->println("Content-type: text/html");
     c->println();
-    c->println("<h1>o-bako file list</h1>");
+    c->println("<h1>haco3 file list</h1>");
 
     while(f){
       if(f.isDirectory()){
-        c->print(f.name());
+        c->print(f.path());
         c->println("/");
       }else{
         c->print("<li>");
-        c->print(f.name());
+        c->print(f.path());
         c->print(" <a href='/file");
-        c->print(f.name());
+        c->print(f.path());
         c->print("'>");
         c->print("view</a>");
 
         c->print(" <a href='/edit");
-        c->print(f.name());
+        c->print(f.path());
         c->print("'>");
         c->print("edit</a>");
 
         c->print(" <a href='/html");
-        c->print(f.name());
+        c->print(f.path());
         c->print("'>");
         c->print("html</a>");
 
-        c->print("<form style='display:inline;' method='POST' action='/delete/");
-        c->print(f.name());
+        c->print("<form style='display:inline;' method='POST' action='/delete");
+        c->print(f.path());
         c->println("'>");
         c->println("<input type='submit' value='DELETE'>");
         c->println("</form>");
@@ -242,7 +255,7 @@ int WifiGame::c2hex(char c){
     case 'E': return 14;
     case 'F': return 15;
   }
-  // return 0;//リターンエラー回避のためのダミー
+  return 0;
 }
 void WifiGame::postHandler(WiFiClient *c, String path, String body){
   String filePath = "";
@@ -440,7 +453,22 @@ int WifiGame::run(int remainTime){
             assignSetting(&key, &value, &ssid, &password);
 
             preferences.begin("wifi-config");
+
+            // File fr = SPIFFS.open(WIFIPASS_FILE, "r");// ⑩ファイルを読み込みモードで開く
+            // for(int i= 0;i<2;i++){//
+            // String _readStr = fr.readStringUntil(',');// ⑪,まで１つ読み出し
+            //   if(i==0){
+            //     ssid = _readStr;
+            //     preferences.putString("WIFI_SSID", ssid);
+            //     }else if(i==1){
+            //     password = _readStr;
+            //     preferences.putString("WIFI_PASSWD", password);
+            //     }
+            // }
+            // fr.close();	// ⑫	ファイルを閉じる
+
             preferences.putString("WIFI_SSID", ssid);
+
             preferences.putString("WIFI_PASSWD", password);
 
             client.println(ssid);
