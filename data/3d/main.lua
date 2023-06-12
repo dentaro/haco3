@@ -1,82 +1,110 @@
--- 3Dポリゴンの頂点座標
--- vertices = {
---     {-16, -16, 0},
---     {16, -16, 0},
---     {0, 16, 8},
+camera = creobj(0)
+light = creobj(1)
+obj1 = creobj(2)
+colangle = 0
+
+-- -- 正12面体のデータを生成
+-- function createTriangularCube()
+--   local vertices = {
+--     {-1, -1, -1}, {1, -1, -1}, {1, 1, -1}, {-1, 1, -1},
+--     {-1, -1, 1}, {1, -1, 1}, {1, 1, 1}, {-1, 1, 1}
 --   }
 
--- vertices={
---   { 1.0, -1.0, -1.0},
---   { 1.0, -1.0, 1.0},
---   {-1.0, -1.0, 1.0},
---   {-1.0, -1.0, -1.0},
---   { 1.0, 1.0, -1.0},
---   { 1.0, 1.0, 1.0},
---   {-1.0, 1.0, 1.0},
---   {-1.0, 1.0, -1.0}
+--   local faces = {
+--     {1, 2, 3}, {1, 3, 4}, {1, 4, 8}, {1, 8, 5},
+--     {2, 6, 7}, {2, 7, 3}, {3, 7, 8}, {3, 8, 4},
+--     {5, 8, 7}, {5, 7, 6}, {1, 5, 6}, {1, 6, 2}
 --   }
 
-vertices={
-  { 16, -16, -16},
-  { 16, -16, 16},
-  {-16, -16, 16},
-  {-16, -16, -16},
-  { 16, 16, -16},
-  { 16, 16, 16},
-  {-16, 16, 16},
-  {-16, 16, -16}
-  }
+--   local poly_vertices = {}
+
+--   for _, face in ipairs(faces) do
+--     for _, index in ipairs(face) do
+--       table.insert(poly_vertices, vertices[index])
+--     end
+--   end
+
+--   return poly_vertices
+-- end
+
+-- local poly_vertices = createTriangularCube()
+
+-- -- 正12面体のデータを生成
+-- local poly_vertices = createDode
+
+--   --正２０面体生成
+  function createIcosahedron()
+    local phi = (1 + math.sqrt(5)) / 2
   
-  -- 描画する3Dポリゴンの回転角度
-angle = 0
-period=24
-frame=0
-crash=0
+    local vertices = {
+      {-1, phi, 0}, {1, phi, 0}, {-1, -phi, 0}, {1, -phi, 0},
+      {0, -1, phi}, {0, 1, phi}, {0, -1, -phi}, {0, 1, -phi},
+      {phi, 0, -1}, {phi, 0, 1}, {-phi, 0, -1}, {-phi, 0, 1}
+    }
+  
+    local faces = {
+      {1, 12, 6}, {1, 6, 2}, {1, 2, 8}, {1, 8, 11}, {1, 11, 12},
+      {2, 6, 10}, {6, 12, 5}, {12, 11, 3}, {11, 8, 7}, {8, 2, 9},
+      {4, 10, 5}, {4, 5, 3}, {4, 3, 7}, {4, 7, 9}, {4, 9, 10},
+      {5, 10, 6}, {3, 5, 12}, {7, 3, 11}, {9, 7, 8}, {10, 9, 2}
+    }
+
+    local poly_vertices = {}
+  
+    for _, face in ipairs(faces) do
+      for _, index in ipairs(face) do
+        table.insert(poly_vertices, vertices[index])
+      end
+    end
+    return poly_vertices
+  end
+local poly_vertices = createIcosahedron()
+
+function _init()
+camera.x = 0
+camera.y = 1
+camera.z = 0
+camera.angle = 0
+camera.zoom = 0.3
+end
 
 function _update()
-  frame = frame + 1
-  angle = angle + 0.1
-end
-  
-function _draw()
-  
-  cls()
-
-  -- 3Dポリゴンの座標を計算する
-  local cos = math.cos(angle)
-  local sin = math.sin(angle)
-  local points = {}
-
-  -- テーブルの初期化
-  local index = 1
-
-  for _, vertex in ipairs(vertices) do
-    local x, y, z = vertex[1], vertex[2], vertex[3]
-    local x2 = x * cos - z * sin
-    local z2 = z * cos + x * sin
-    local scale = 64 / (64 - z2) -- パースペクティブ補正
-    local sx = x2 * scale + 64
-    local sy = y * scale + 64
-
-    -- テーブルに座標を追加する
-    points[index] = {}
-    points[index].x = sx
-    points[index].y = sy
-
-    index = index + 1
+  if camera.angle > 360 then 
+    camera.angle = 0
   end
-  -- 3Dポリゴンを描画する
-  line(points[1].x, points[1].y, points[2].x, points[2].y, 7)
-  line(points[2].x, points[2].y, points[3].x, points[3].y, 7)
-  line(points[3].x, points[3].y, points[1].x, points[1].y, 7)
-  
-  
-  mv = mid(22,5,33)
-  print(mv,0,0)
-  rv = atan2(3,4)
-  print(rv,0,0)
-end  
+  -- カメラの移動と回転
+  if btn(1) >= 2 then
+    camera.x = camera.x + 1  -- 左に移動
+  elseif btn(2) >= 2 then
+    camera.x = camera.x - 1  -- 右に移動
+  end
 
+  if btn(3) >= 2 then
+    camera.y = camera.y + 1  -- 上に移動
+  elseif btn(4) >= 2 then
+    camera.y = camera.y - 1  -- 下に移動
+  end
+  if btn(6) >= 2 then
+    camera.zoom = camera.zoom - 0.05  -- 左に回転
+  elseif btn(8) >= 2 then
+    camera.zoom = camera.zoom + 0.05  -- 右に回転
+  end
+  colangle = colangle + 1
+  if colangle > 360 then 
+    colangle  = colangle - 360
+  end
+  obj1.angle = obj1.angle + 1
+  if obj1.angle > 360 then 
+    obj1.angle  = obj1.angle - 360
+  end
+end 
+
+function _draw()
+  cls()
+  trans(obj1.x,obj1.y,obj1.z,obj1.angle,obj1.size,2,colangle)
+  cam(camera.x,camera.y,camera.z,camera.angle,camera.zoom)
+  rendr(poly_vertices)
+end
 -------------------------------------------------------
 function setup()--init
   _init()
@@ -85,10 +113,3 @@ function loop()--update --draw
 _update()
 _draw()
 end
-
-
-
-
-
-
-
