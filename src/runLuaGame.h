@@ -22,12 +22,13 @@ extern "C"{
 #ifndef RUN_LUA_GAME_H
 #define RUN_LUA_GAME_H
 
-#define MAX_CHAR 1024
+#define MAX_CHAR 512//1024
+// #define MAX_CHAR 2048
 
 // #define LUA_BUFFERSIZE 1024
 // #define LUA_BUFFERSIZE_PS (LUA_BUFFERSIZE * 2)
 
-// #define LUA_BUFSIZE 2048
+#define LUA_BUFSIZE 1024
 
 struct LoadF{
   File f;
@@ -53,8 +54,9 @@ class RunLuaGame: public BaseGame
     lua_State* L;
     luaL_Buffer b;
     byte col[3] = {0,0,0};
-    // int frame = 0;
-    int buttonState[CTRLBTNNUM];//ボタンの個数未定
+
+    // std::deque<int> buttonState;//ボタンの個数未定
+    int touchState;//タッチボタン
     int tp[2] ={0,0};
     uint16_t palette[256];
 
@@ -66,6 +68,11 @@ class RunLuaGame: public BaseGame
     bool exitRequest = false;
     bool runError = false;
     String errorString;
+    // Vector3::Vector3 boxzero;
+    int boxzerox = 60;
+    int boxzeroy = 60;
+
+    std::vector<String> fileNamelist;
 
     // int gameState = 0;
 
@@ -102,17 +109,25 @@ class RunLuaGame: public BaseGame
     static int l_opmode(lua_State* L);
     static int l_drawrect(lua_State* L);
     static int l_fillrect(lua_State* L);
+    static int l_fillpoly(lua_State* L);
+    static int l_drawbox(lua_State* L);
+    static int l_drawboxp(lua_State* L);
     static int l_fillcircle(lua_State* L);
     static int l_drawcircle(lua_State* L);
     static int l_drawtri(lua_State* L);
     static int l_filltri(lua_State* L);
+    static int l_phbtn(lua_State* L);
     static int l_btn(lua_State* L);
+    static int l_touch(lua_State* L);
     static int l_btnp(lua_State* L);
     static int l_sldr(lua_State* L);
     static int l_getip(lua_State* L);
     static int l_iswifidebug(lua_State* L);
     static int l_wifiserve(lua_State* L);
     static int l_run(lua_State* L);
+    static int l_appmode(lua_State* L);
+    static int l_appinfo(lua_State* L);
+    static int l_editor(lua_State* L);
     static int l_list(lua_State* L);
     static int l_require(lua_State* L);
     static int l_httpsget(lua_State* L);
@@ -124,8 +139,8 @@ class RunLuaGame: public BaseGame
     String getBitmapName(String s);
     String getPngName(String s);
     void hsbToRgb(float angle, float si, float br, int& r, int& g, int& b);
-    void fillFastTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint16_t c1);
-
+    void hsbToRgb2(float angle, float br, int& r, int& g, int& b);
+    void fillFastTriangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t c1);
     //継承先の関数を優先するものにはvirtual
     virtual void haco8resume(){};//派生クラスに書き換えられるダミー関数
     //派生クラスでのみ実行されるダミー関数（このクラスでは何の処理もしていない）
@@ -134,8 +149,12 @@ class RunLuaGame: public BaseGame
     void init();
     int run(int _remainTime);
     void pause();
+
+    // void fillFastTriangle(float x0, float y0, float x1, float y1, float x2, float y2, uint16_t c1);
   
     protected://継承先でも使えるもの
+    
+    
 };
 
 #endif

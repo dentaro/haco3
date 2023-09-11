@@ -45,6 +45,8 @@ class RunJsGame: public BaseGame
     bool runError = false;
     String errorString;
 
+    // bool firstLoopF = true;
+    
     uint8_t clist[16][3] =
   {
   { 0,0,0},//0: 黒色
