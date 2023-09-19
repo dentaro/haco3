@@ -9,7 +9,7 @@ ina_aniさんのo-bakoをlovyanGFXに移植し、タッチパネル対応にす�
 
 https://inajob.github.io/o-bako-simulator/index.html
 
-Lua5.3が動いていています。
+Lua5.3が動いています。
 
 platformIOプロジェクトのフォルダをコピーした「コード」だけをあげています。
 
