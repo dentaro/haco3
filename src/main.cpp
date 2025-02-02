@@ -942,6 +942,7 @@ void debugInfo()
   tft.print("[");
   tft.print(ui.getPhVol(2)); 
   tft.print("]");
+  tft.print(hitvalue);
 
   tft.setCursor(110, 111);
   tft.print(masterVol);
