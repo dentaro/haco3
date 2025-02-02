@@ -3,15 +3,23 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <FS.h>
+// #include <M5GFX_DentaroUI.hpp>
 #include <LovyanGFX_DentaroUI.hpp>
+
+// #include "M5Cardputer.h"
 
 #include "SPIFFS.h"
 #include "baseGame.h"
-#include "Tunes.h"
+
+// #include "Editor.h"
 
 #include <bitset>
 #include <iostream>
 #include <fstream>
+
+#include <vector> 
+
+// #include "Speaker_Class.hpp"
 
 extern "C"{
 #include <lua.h>
@@ -19,9 +27,12 @@ extern "C"{
 #include <lauxlib.h>
 }
 
+// #define BSTARBUFNUM 100
+
+#define STARS_NUM 1000
+
 #ifndef RUN_LUA_GAME_H
 #define RUN_LUA_GAME_H
-
 #define MAX_CHAR 512//1024
 // #define MAX_CHAR 2048
 
@@ -30,20 +41,40 @@ extern "C"{
 
 #define LUA_BUFSIZE 1024
 
-struct LoadF{
+struct LoadF {
   File f;
-  char buf[MAX_CHAR];
+  char* buf; // ポインタを使用
+
+  // コンストラクタでメモリ確保
+  LoadF(size_t size) : buf(new char[size]) {}
+
+  // デストラクタでメモリ解放
+  ~LoadF() {
+    delete[] buf; // ポインタを使用してメモリを解放
+  }
 };
+
 
 inline uint16_t lua_rgb24to16(uint8_t r, uint8_t g, uint8_t b) {
   uint16_t tmp = ((r>>3) << 11) | ((g>>2) << 5) | (b>>3);
   return tmp; //(tmp >> 8) | (tmp << 8);
 }
 
-class RunLuaGame: public BaseGame
+// Intersection 構造体の定義
+struct Intersection {
+    float x;
+    float y;
+    float distance;
+    float mapheight;
+    int colangle;
+};
+
+class runLuaGame: public BaseGame
 {//クラスはデフォルトではprivata
 
   public:
+    int tp[2] ={0,0};
+
     enum WifiPhase{
       NONE,
       SELECT,
@@ -51,17 +82,73 @@ class RunLuaGame: public BaseGame
       RUN
     };
 
+    //  void fillFastTriangle(float x0, float y0, float x1, float y1, float x2, float y2, uint16_t c1);
+
+  
+
+
+  struct Rect2D {
+    int x;
+    int y;
+    int w;
+    int h;
+    Rect2D(int _x, int _y, int _w, int _h) : x(_x), y(_y), w(_w), h(_h) {}
+  };
+
+struct CameraObj {
+    float x;
+    float y;
+    float z;
+    float x2;
+    float y2;
+    float z2;
+    float anglex;
+    float angley;
+    float anglez;
+    float zoom;
+
+    // コンストラクタで初期値を設定
+    CameraObj()
+        : x(0), y(0), z(0), x2(0), y2(0), z2(0), anglex(0), angley(0), anglez(0), zoom(1.0)
+    {
+    }
+  };
+
+  
+  struct LightObj {
+    float x;
+    float y;
+    float z;
+
+    // コンストラクタで初期値を設定
+    LightObj()
+        : x(0), y(0), z(0)
+    {
+    }
+  };
+
+  struct CubeObj {
+    float x;
+    float y;
+    float z;
+    float angle;
+    float size;
+    int colangle;
+    int width;
+    int height;
+    // コンストラクタで初期値を設定
+    CubeObj()
+        : x(0), y(0), z(0), angle(0), size(1.0),colangle(120), width(10), height(10)
+    {
+    }
+};
+
     lua_State* L;
     luaL_Buffer b;
-    byte col[3] = {0,0,0};
+    uint8_t  col[3] = {0,0,0};
+    uint8_t  col2[3] = {0,0,0};
 
-    // std::deque<int> buttonState;//ボタンの個数未定
-    int touchState;//タッチボタン
-    int tp[2] ={0,0};
-    uint16_t palette[256];
-
-    // bool wifiDebugRequest = true;//外部ファイルから書き換えテifiモードにできる
-    // bool wifiDebugSelf = false;
+    
 
     WifiPhase wifiMode = NONE;
     int modeSelect = 0;
@@ -74,41 +161,60 @@ class RunLuaGame: public BaseGame
 
     std::vector<String> fileNamelist;
 
-    // int gameState = 0;
+    virtual void haco8resume(){};//派生クラスに書き換えられるダミー関数
 
-    uint8_t clist[16][3] =
-  {
-  { 0,0,0},//0: 黒色
-  { 27,42,86 },//1: 暗い青色
-  { 137,24,84 },//2: 暗い紫色
-  { 0,139,75 },//3: 暗い緑色
-  { 183,76,45 },//4: 茶色
-  { 97,87,78 },//5: 暗い灰色
-  { 194,195,199 },//6: 明るい灰色
-  { 255,241,231 },//7: 白色
-  { 255,0,70 },//8: 赤色
-  { 255,160,0 },//9: オレンジ
-  { 255,238,0 },//10: 黄色
-  { 0,234,0 },//11: 緑色
-  { 0,173,255 },//12: 水色
-  { 134,116,159 },//13: 藍色
-  { 255,107,169 },//14: ピンク
-  { 255,202,165}//15: 桃色
-  };
+
+    // int gameState = 0;
+    runLuaGame(); 
+    runLuaGame(int _gameState, String _mn);//ゲームの状態を立ち上げ時に渡す
 
     int loadSurface(File* fp, uint8_t* buf);
     static int l_tp(lua_State* L);
+    static int l_tpf(lua_State* L);
     static int l_tstat(lua_State* L);
+
+    // static int l_spmap(lua_State* L);
+
+    static int l_vol(lua_State* L);
+    static int l_print(lua_State* L);
+    static int l_pinw(lua_State* L);
+    static int l_pinr(lua_State* L);
     static int l_tone(lua_State* L);
+    static int l_tool(lua_State* L);
+    static int l_spr8(lua_State* L);
     static int l_spr(lua_State* L);
     static int l_scroll(lua_State* L);
+    static int l_rmap(lua_State* L);
     static int l_pset(lua_State* L);
     static int l_pget(lua_State* L);
+    static int l_cls(lua_State* L);
+    static int l_mget(lua_State* L);
+    static int l_map(lua_State* L);
+
+    static int l_fget(lua_State* L);
+    static int l_fset(lua_State* L);
+    static int l_sfx(lua_State* L);
+    static int l_sfxini(lua_State* L);
+
+    static int l_music(lua_State* L);
+    static int l_go2(lua_State* L);
+    static int l_gstat(lua_State* L);
+
+    static int l_gvolv(lua_State* L);
+    static int l_svolv(lua_State* L);
+    
+    static int l_debug(lua_State* L);
+
     static int l_color(lua_State* L);
     static int l_text(lua_State* L);
     static int l_opmode(lua_State* L);
     static int l_drawrect(lua_State* L);
     static int l_fillrect(lua_State* L);
+    static int l_rectfill(lua_State* L);//png配置できるrect
+    static int l_fillp(lua_State* L);
+    static int l_oval(lua_State* L);
+    static int l_ovalfill(lua_State* L);
+    static int l_fps(lua_State* L);
     static int l_fillpoly(lua_State* L);
     static int l_drawbox(lua_State* L);
     static int l_drawboxp(lua_State* L);
@@ -116,34 +222,145 @@ class RunLuaGame: public BaseGame
     static int l_drawcircle(lua_State* L);
     static int l_drawtri(lua_State* L);
     static int l_filltri(lua_State* L);
-    static int l_phbtn(lua_State* L);
+    static int l_pal(lua_State* L);
+    static int l_key(lua_State* L);
+
+    static int l_bchat(lua_State* L);
+    static int l_btnini(lua_State* L);
     static int l_btn(lua_State* L);
+    static int l_btnf(lua_State* L);
     static int l_touch(lua_State* L);
     static int l_btnp(lua_State* L);
     static int l_sldr(lua_State* L);
-    static int l_getip(lua_State* L);
-    static int l_iswifidebug(lua_State* L);
-    static int l_wifiserve(lua_State* L);
+
+    static int l_sin(lua_State* L);
+    static int l_cos(lua_State* L);
+
+    static int l_ceil(lua_State* L);
+    static int l_rnd(lua_State* L);
+    static int l_srnd(lua_State* L);
+    static int l_sgn(lua_State* L);
+    static int l_shl(lua_State* L);
+    static int l_shr(lua_State* L);
+    static int l_flr(lua_State* L);
+    static int l_min(lua_State* L);
+    static int l_mid(lua_State* L);
+    static int l_max(lua_State* L);
+    static int l_abs(lua_State* L);
+    static int l_sqrt(lua_State* L);
+    static int l_distance(lua_State* L);
+    static int l_atan2(lua_State* L);
+    static int l_band(lua_State* L);
+    static int l_bnot(lua_State* L);
+    static int l_bor(lua_State* L);
+    static int l_bxor(lua_State* L);
+
+    // static int l_getip(lua_State* L);
+    // static int l_iswifidebug(lua_State* L);
+    // static int l_wifiserve(lua_State* L);
+    // static int l_initstars(lua_State* L);
+    // static int l_creobj(lua_State* L);
+    static int l_creobj2(lua_State* L);
+    // static int l_rendr(lua_State* L);
+    static int l_rendr2(lua_State* L);
+    // static int l_drawstars(lua_State* L);
+    
+    static int l_win(lua_State* L);
     static int l_run(lua_State* L);
     static int l_appmode(lua_State* L);
     static int l_appinfo(lua_State* L);
     static int l_editor(lua_State* L);
+    static int l_line(lua_State* L);
     static int l_list(lua_State* L);
-    static int l_require(lua_State* L);
-    static int l_httpsget(lua_State* L);
-    static int l_httpsgetfile(lua_State* L);
-    static int l_savebmp(lua_State* L);
+    // static int l_require(lua_State* L);
+    // static int l_httpsget(lua_State* L);
+    // static int l_httpsgetfile(lua_State* L);
+    // static int l_savebmp(lua_State* L);
     static int l_reboot(lua_State* L);
-    static int l_debug(lua_State* L);
+    // static int l_debug(lua_State* L);
+    
+    static int l_t(lua_State* L);
+    
+  //3D関連
+  static int l_getstl(lua_State* L);
+  static int l_setply(lua_State* L);
+  static int l_rendr(lua_State* L);
+
+  static int l_drawstars(lua_State* L);
+  static int l_starp(lua_State* L);
+
+  static int l_creobj(lua_State* L);
+  static int l_lig(lua_State* L);
+  static int l_cam(lua_State* L);
+  static int l_trans(lua_State* L);
+
+  //fps関連
+  static int l_wini(lua_State* L);
+  static int l_wset(lua_State* L);
+  static int l_wdraw(lua_State* L);
+
+  static int l_gcol(lua_State* L);
+  static int l_sp3d(lua_State* L);
+  static int l_spmap(lua_State* L);
+  // static int l_drawpng(lua_State* L);
+  static int l_initstars(lua_State* L);
+
+  // static int l_drawstars2(lua_State* L);
+  // static int l_drawmaps(lua_State* L);
+  // static int l_getmappos(lua_State* L);
+  // static int l_getgpos(lua_State* L);
+  
+  // ベクトルの長さを計算する関数
+  float calculateLength(float x, float y, float z);
+
+  // ベクトルの正規化を行う関数
+  Vector3<float> normalize(float x, float y, float z);
+
+  // 2つのベクトルの内積を計算する関数
+  float calculateDotProduct(const Vector3<float>& v1, const Vector3<float>& v2);
+
+  // 3つの頂点から法線ベクトルを計算する関数
+  Vector3<float> calculateNormal(const Vector3<float>& v1, const Vector3<float>& v2, const Vector3<float>& v3);
+
+  // ポリゴンの明るさを計算する関数
+  float calculateBrightness(const Vector3<float>& v1, const Vector3<float>& v2, const Vector3<float>& v3, const LightObj& light);
+
+  // void renderPolygon(lua_State* L, const std::vector<std::vector<float>>& polygonData);
+  // void renderPolygon(const std::vector<std::vector<float>>& polygonData, int colangle);
+  
+  // void renderPolygon(lua_State* L, const std::vector<std::vector<float>>& polygonData);
+
+  // void getVertices(lua_State* L, int tableIndex, Vertex& v1, Vertex& v2, Vertex& v3);
+  // void fill3DFastTriangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t c1);
+  // void fastPoint(const Vector3<float> v1, uint16_t c1);
+  // void fastPoint(const Vector3<float> v1, int starbrightness, int noInt);
+
+  void fill3DFastTriangle(int16_t x0, int16_t y0, int16_t z0,int16_t x1, int16_t y1, int16_t z1,int16_t x2, int16_t y2, int16_t z2,uint16_t c1);
+  void triangle3D(const Vector3<float> v1,const Vector3<float> v2,const Vector3<float> v3);
+  // void point3D(const Vector3<float> v1,uint16_t c1);
+  void line3D(const Vector3<float> v1,const Vector3<float> v2,uint16_t c1);
+
+
+    void fastPoint(const Vector3<float> v1, int starbrightness, int noInt);
 
     String getBitmapName(String s);
     String getPngName(String s);
     void hsbToRgb(float angle, float si, float br, int& r, int& g, int& b);
     void hsbToRgb2(float angle, float br, int& r, int& g, int& b);
     void fillFastTriangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t c1);
-    //継承先の関数を優先するものにはvirtual
-    virtual void haco8resume(){};//派生クラスに書き換えられるダミー関数
+   
     //派生クラスでのみ実行されるダミー関数（このクラスでは何の処理もしていない）
+    
+    void triangle3D(const Vector3<float> v1,const Vector3<float> v2,const Vector3<float> v3, int idx);
+    void fill3DFastTriangle(int32_t x0, int32_t y0, int32_t z0,
+                                        int32_t x1, int32_t y1, int32_t z1,
+                                        int32_t x2, int32_t y2, int32_t z2,
+                                        uint16_t c1);
+// float calculateLength(float x, float y, float z);
+// Vector3<float> normalize(float x, float y, float z);
+// float calculateDotProduct(const Vector3<float>& v1, const Vector3<float>& v2);
+// Vector3<float> calculateNormal(const Vector3<float>& v1, const Vector3<float>& v2, const Vector3<float>& v3);
+// float calculateBrightness(const Vector3<float>& v1, const Vector3<float>& v2, const Vector3<float>& v3, const LightObj& light);
 
     void resume();
     void init();

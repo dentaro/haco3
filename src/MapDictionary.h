@@ -15,7 +15,7 @@
 // #include "runJsGame.h"
 // #include "wifiGame.h"
 // MapTile構造体の定義
-#define BUF_PNG_NUM 9
+#define BUF_PNG_NUM 1
 
 class MapTile {
   private:
@@ -190,17 +190,6 @@ public:
     void setSprptr(int no, LGFX_Sprite* _sprptr){
       maptils[no].setSprptr2(_sprptr);
     }
-    
-
-    // void setKeySprptr(String _Key, LGFX_Sprite* _buffSprite){
-    //   auto it = key2ptr.find(_Key);
-    //     if (it != key2ptr.end()) {
-    //         key2ptr.erase(it);  // 古いキーのエントリを削除
-    //         key2ptr[_newKey] = sprptr;  // 新しいキーでエントリを追加
-    //     }
-
-    //   maptils[no].setSprptr2(_buffSprite);
-    // }
 
     void setNewKeySprptr(const String& _Key, LGFX_Sprite* sprptr) {
       auto it = key2ptr.find(_Key);
@@ -210,14 +199,7 @@ public:
     }
 
     void copy2buff(LovyanGFX& _buffSprite, LGFX_Sprite* _sprptr, int no) {
-        // maptils[no].setSprptr2(_sprptr);
-        // setSprptr(no, _sprptr);
-        // maptils[no].drawMap2(_buffSprite,0,0);
-
-        // _buffSprite.
         _buffSprite.fillRect(20*no, 20*no, 20,20, TFT_BLUE);
-
-        // _sprptr->pushSprite(&_buffSprite, 0,0);
     }
 
     void setOldReadNo(int no, int _oldreadNo){
