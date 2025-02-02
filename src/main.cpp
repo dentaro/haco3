@@ -1621,27 +1621,27 @@ void handleWriteCommand(const char *path, const String &newContent) {
 
 
 // シリアルから1行ずつ受け取り、ファイルに追記する関数
-void appendToFile(String line) {
-    if (line.length() == 0) {
-        return;
-    }
+// void appendToFile(String line) {
+//     if (line.length() == 0) {
+//         return;
+//     }
 
-    // ファイルを開き、1行を追記
-    File file = SPIFFS.open(fileName.c_str(), FILE_APPEND);
-    if (file) {
-        file.println(line);
-        file.close();
-        Serial.println("Line written to file.");
-    } else {
-        Serial.println("Failed to open file for appending.");
-    }
-}
+//     // ファイルを開き、1行を追記
+//     File file = SPIFFS.open(fileName.c_str(), FILE_APPEND);
+//     if (file) {
+//         file.println(line);
+//         file.close();
+//         Serial.println("Line written to file.");
+//     } else {
+//         Serial.println("Failed to open file for appending.");
+//     }
+// }
 
 // ファイル書き込みが終了したら、再び待機状態に戻る
-void endFileWrite() {
-    writingToFile = false;
-    Serial.println("File write completed.");
-}
+// void endFileWrite() {
+//     writingToFile = false;
+//     Serial.println("File write completed.");
+// }
 
 String wfileName = "";
 bool writingToFile = false;
@@ -1666,7 +1666,7 @@ void serialReceiveTask(void *parameter) {
       else if (command.startsWith("write ")) {
         // "write " を除去し、ファイル名を取得
         wfileName = command.substring(6);
-        writeToFile(wfileName);
+        // writeToFile(wfileName);
         // // command = command.substring(6); // "write " を除去
         // String fileName = command.substring(6);// "write " を除去
 
@@ -1706,9 +1706,9 @@ void serialReceiveTask(void *parameter) {
         // Serial.println("File write completed.");
         // reboot(fileName, TFT_RUN_MODE);
     
-      }else if (writingToFile) {
-            // ファイル書き込みモードならシリアルから受け取ったデータをファイルに追加
-            appendToFile(command);
+      // }else if (writingToFile) {
+      //       // ファイル書き込みモードならシリアルから受け取ったデータをファイルに追加
+      //       appendToFile(command);
       } 
       // 他のコマンドに対応する処理（例: "status" コマンド）
       else if (command.startsWith("list")) {
