@@ -1,19 +1,9 @@
 # haco3
 
 
-esp32で動くミニゲーム開発プラットフォームです。PICO-8ライクな書き方でミニゲームが作れます。
+esp32で動くミニゲーム開発プラットフォームです。
 
-ina_aniさんのo-bakoをlovyanGFXに移植し、タッチパネル対応にするため自作ライブラリDentaroUI（同梱のカスタム仕様）を追加したのがhaco3です。
-
-スプライトも自作です。LovyanGFXもo-bakoも素晴らしいプロジェクトで、この２つをベースにhaco3はできています。
-
-https://inajob.github.io/o-bako-simulator/index.html
-
-Lua5.3が動いています。
-
-platformIOプロジェクトのフォルダをコピーした「コード」だけをzipあげています。
-
-ビルドオプションの設定などが必要なため、インストールはplatformIOでしかできません。（Arduino不可）
+基板を発注して、パーツを組み合わせれば、PICO-8ライクな書き方でミニゲームが作れます。
 
 ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 
@@ -113,3 +103,17 @@ https://ja.aliexpress.com/item/4001044110474.html?spm=a2g0o.order_list.order_lis
 RCA-AVソケット（映像の外部出力はプログラミングが必要）
 
 https://ja.aliexpress.com/item/1005006135848173.html?spm=a2g0o.order_list.order_list_main.204.644b585aLsBgGt&gatewayAdapt=glo2jpn
+
+ーーーーーーーーーーーーーーーーーーーーーーーーー
+
+ina_aniさんのo-bakoをlovyanGFXに移植し、タッチパネル対応にするため自作ライブラリDentaroUI（同梱のカスタム仕様）を追加したのがhaco3です。
+
+スプライトも自作です。LovyanGFXもo-bakoも素晴らしいプロジェクトで、この２つをベースにhaco3はできています。
+
+https://inajob.github.io/o-bako-simulator/index.html
+
+Lua5.3が動いています。
+
+platformIOプロジェクトのフォルダをコピーした「コード」だけをzipあげています。
+
+ビルドオプションの設定などが必要なため、インストールはplatformIOでしかできません。（Arduino不可）
