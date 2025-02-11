@@ -24,6 +24,9 @@ tezukuriretoro.zipという基板用のガーバーデータを追加しまし�
 
 基板はPLCPCBなどで500~1000円で発注できます。
 
+Arduinoで以下をインストールすると、ファミコン（NES)のエミュレーターにもなります。
+https://github.com/dentaro/NESCat
+
 基本部品(5000~6000円）程度
 
 --
