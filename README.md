@@ -57,6 +57,22 @@ https://ja.aliexpress.com/item/1005008196773113.html?spm=a2g0o.detail.0.0.6d01l7
 
 ピンヘッダ（オス・メス）500円程度
 
+オス
+
+17列（2個）
+
+14列（1個）
+
+4列（1個）
+
+メス
+
+17列（2個）
+
+14列（1個）
+
+4列（1個）
+
 https://ja.aliexpress.com/item/32724478308.html?spm=a2g0o.order_list.order_list_main.394.644b585aLsBgGt&gatewayAdapt=glo2jpn
 
 抵抗（100〜300円）
