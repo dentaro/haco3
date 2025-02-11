@@ -51,6 +51,7 @@ Bluetooth開発ボード,wifiモジュール,ttgo,t8,v1.8,ESP32-WROVER, 8mb,psra
 https://ja.aliexpress.com/item/1005006639630413.html?spm=a2g0o.order_list.order_list_main.65.644b585aLsBgGt&gatewayAdapt=glo2jpn
 
 スピーカー1個300円
+
 https://ja.aliexpress.com/item/1005006358049156.html?spm=a2g0o.order_list.order_list_main.53.644b585aLsBgGt&gatewayAdapt=glo2jpn
 
 リミットスイッチ（２回路切替スイッチ）4個で300円
@@ -106,7 +107,9 @@ https://ja.aliexpress.com/item/32724478308.html?spm=a2g0o.order_list.order_list_
 外部出力したい時（はじめは必要ない）
 
 ヘッドホンジャックソケット（音声）
+
 https://ja.aliexpress.com/item/4001044110474.html?spm=a2g0o.order_list.order_list_main.200.644b585aLsBgGt&gatewayAdapt=glo2jpn
 
 RCA-AVソケット（映像の外部出力はプログラミングが必要）
+
 https://ja.aliexpress.com/item/1005006135848173.html?spm=a2g0o.order_list.order_list_main.204.644b585aLsBgGt&gatewayAdapt=glo2jpn
