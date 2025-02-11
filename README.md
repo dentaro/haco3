@@ -25,11 +25,17 @@ tezukuriretoro.zipという基板用のガーバーデータを追加しまし�
 基板はPLCPCBなどで500~1000円で発注できます。
 
 Arduinoで以下をインストールすると、ファミコン（NES)のエミュレーターにもなります。
+
 https://github.com/dentaro/NESCat
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 
 基本部品(5000~6000円）程度
 
---
+ESP32-WROVER (Bluetooth開発ボード,wifiモジュール,ttgo,t8,v1.8, 8mb,psram,tfカード)1個2000円
+
+https://ja.aliexpress.com/item/1005006639630413.html?spm=a2g0o.order_list.order_list_main.65.644b585aLsBgGt&gatewayAdapt=glo2jpn
+
 
 TFT液晶2.8インチタッチパネル付き1個1500円
 
@@ -38,10 +44,6 @@ https://ja.aliexpress.com/item/1005006623369442.html?spm=a2g0o.detail.pcDetailTo
 タクトスイッチ3個100~300円
 
 https://ja.aliexpress.com/item/4000544090602.html?spm=a2g0o.productlist.main.3.4c8251028zXh88&algo_pvid=6c0a256a-8bf0-4e69-8160-52db26d62564&algo_exp_id=6c0a256a-8bf0-4e69-8160-52db26d62564-1&pdp_ext_f=%7B%22order%22%3A%22884%22%2C%22eval%22%3A%221%22%7D&pdp_npi=4%40dis%21JPY%21451%21451%21%21%212.91%212.91%21%40214100f417392712054285725e42c7%2110000002795928570%21sea%21JP%21178272571%21X&curPageLogUid=6xhgWfRlmfcF&utparam-url=scene%3Asearch%7Cquery_from%3A
-
-Bluetooth開発ボード,wifiモジュール,ttgo,t8,v1.8,ESP32-WROVER, 8mb,psram,tfカード1個2000円
-
-https://ja.aliexpress.com/item/1005006639630413.html?spm=a2g0o.order_list.order_list_main.65.644b585aLsBgGt&gatewayAdapt=glo2jpn
 
 スピーカー1個300円
 
