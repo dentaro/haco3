@@ -15,6 +15,11 @@ platformIOプロジェクトのフォルダをコピーした「コード」だ�
 
 ビルドオプションの設定などが必要なため、インストールはplatformIOでしかできません。（Arduino不可）
 
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+
+haco3ゲームをプログラミングするためのソフト（win,mac両方あります）
+
+https://drive.google.com/drive/folders/1Eny3NMIrRxlyB-WC0IIFq0EagY_Ctn1x?usp=sharing
 
 ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 
