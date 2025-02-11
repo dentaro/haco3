@@ -17,6 +17,8 @@ platformIOプロジェクトのフォルダをコピーした「コード」だ�
 
 ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 
+「haco3editor」
+
 haco3ゲームをプログラミングするためのソフト（win,mac両方あります）
 
 https://drive.google.com/drive/folders/1Eny3NMIrRxlyB-WC0IIFq0EagY_Ctn1x?usp=sharing
