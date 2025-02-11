@@ -26,7 +26,7 @@ https://drive.google.com/drive/folders/1Eny3NMIrRxlyB-WC0IIFq0EagY_Ctn1x?usp=sha
 ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
 
 「てづくりれとろ」
-
+![Image](https://github.com/user-attachments/assets/b0eb5afc-7657-48cf-9c26-ed7b01d68ba6)
 tezukuriretoro.zipという基板用のガーバーデータを追加しました。
 
 基盤はPLCPCBなどで500~1000円で作れます。
