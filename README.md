@@ -1,7 +1,7 @@
 # haco3
 
 
-「ハコさん」というキャラが大活躍する（はずの）esp32で動くミニゲーム開発プラットフォームです。
+esp32で動くミニゲーム開発プラットフォームです。PICO-8ライクな書き方で、100行ほどでミニゲームが作れます。
 
 ina_aniさんのo-bakoをlovyanGFXに移植し、タッチパネル対応にするため自作ライブラリDentaroUI（同梱のカスタム仕様）を追加したのがhaco3です。
 
@@ -19,7 +19,7 @@ platformIOプロジェクトのフォルダをコピーした「コード」だ�
 
 「haco3editor」
 
-haco3ゲームをプログラミングするためのソフト（win,mac両方あります）
+haco3ゲームをプログラミングして下のハードウエアに転送するためのソフト（win,mac両方あります）
 
 https://drive.google.com/drive/folders/1Eny3NMIrRxlyB-WC0IIFq0EagY_Ctn1x?usp=sharing
 
@@ -27,6 +27,9 @@ https://drive.google.com/drive/folders/1Eny3NMIrRxlyB-WC0IIFq0EagY_Ctn1x?usp=sha
 
 「てづくりれとろ」
 ![Image](https://github.com/user-attachments/assets/b0eb5afc-7657-48cf-9c26-ed7b01d68ba6)
+
+haco3をインストールして動かすためのハードウエアです。
+
 tezukuriretoro.zipという基板用のガーバーデータを追加しました。
 
 基盤はPLCPCBなどで500~1000円で作れます。
