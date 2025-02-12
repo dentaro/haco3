@@ -9,7 +9,7 @@ esp32で動くミニゲーム開発プラットフォームです。
 
 「haco3editor」
 
-<blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">Haco3editorすごく使いやすくなった！ <a href="https://t.co/Daajp5cWAc">pic.twitter.com/Daajp5cWAc</a></p>&mdash; でんたろう (@oRLF6nXrMai7KiK) <a href="https://twitter.com/oRLF6nXrMai7KiK/status/1887889675161129120?ref_src=twsrc%5Etfw">February 7, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">Haco3editorすごく使いやすくなった！ <a href="https://t.co/Daajp5cWAc">pic.twitter.com/Daajp5cWAc</a></p>&mdash; でんたろう (@oRLF6nXrMai7KiK) <a href="https://twitter.com/oRLF6nXrMai7KiK/status/1887889675161129120?ref_src=twsrc%5Etfw">February 7, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 haco3ゲームをプログラミングして下のハードウエアに転送するためのソフト（win,mac両方あります）
 
