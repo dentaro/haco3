@@ -122,3 +122,7 @@ Lua5.3が動いています。
 platformIOプロジェクトのフォルダをコピーした「コード」だけをzipあげています。
 
 ビルドオプションの設定などが必要なため、インストールはplatformIOでしかできません。（Arduino不可）
+
+ーーーーーーーーーーーーーーーーーーーーーーーーー
+
+![Image](https://github.com/user-attachments/assets/075dfb13-8081-4f6f-9093-cb3c3ed49518)
