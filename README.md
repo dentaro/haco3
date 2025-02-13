@@ -42,7 +42,7 @@ ESP32-WROVER (Bluetooth開発ボード,wifiモジュール,ttgo,t8,v1.8, 8mb,psr
 https://ja.aliexpress.com/item/1005006639630413.html?spm=a2g0o.order_list.order_list_main.65.644b585aLsBgGt&gatewayAdapt=glo2jpn
 
 
-TFT液晶2.8インチタッチパネル付き1個1500円
+TFT液晶2.8インチタッチパネル付き1個1500円(必ずwith touchを選んでください！）
 
 https://ja.aliexpress.com/item/1005006623369442.html?spm=a2g0o.detail.pcDetailTopMoreOtherSeller.1.2d47a5Cza5CzBO&gps-id=pcDetailTopMoreOtherSeller&scm=1007.14452.396806.0&scm_id=1007.14452.396806.0&scm-url=1007.14452.396806.0&pvid=3165c3cf-c313-4545-a8cd-5d3b5acdef8c&_t=gps-id:pcDetailTopMoreOtherSeller,scm-url:1007.14452.396806.0,pvid:3165c3cf-c313-4545-a8cd-5d3b5acdef8c,tpp_buckets:668%232846%238114%231999&pdp_npi=4%40dis%21JPY%21859%21859%21%21%2140.56%2140.56%21%402141115b17392709119556174e0a2d%2112000037852145489%21rec%21JP%21178272571%21X&utparam-url=scene%3ApcDetailTopMoreOtherSeller%7Cquery_from%3A&search_p4p_id=202502110248319936289498010760422639_0
 
