@@ -33,9 +33,15 @@ haco3をインストールして動かすためのハードウエアです。
 
 https://jlcpcb.com/jp/
 
-ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+ーーーーー
 
-基本部品(5000~6000円）程度
+基本部品
+
+amazonリストはこちら（10000円くらい）
+
+https://www.amazon.jp/hz/wishlist/ls/SSBZ3K5P5NR2?ref_=wl_share
+
+以下アリイクスプレス(5000~6000円くらい）
 
 ESP32-WROVER (Bluetooth開発ボード,wifiモジュール,ttgo,t8,v1.8, 8mb,psram,tfカード)1個2000円
 
