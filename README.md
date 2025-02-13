@@ -5,7 +5,7 @@ esp32で動くミニゲーム開発プラットフォームです。
 （日付の数字の入ったzipを解凍して、platformIOのプロジェクトを差し替えます。
 create project.pdfにやり方が書いてあります。）
 
-基板を発注して、パーツを組み合わせ、platformIOでhaco3をインストールすれば、PICO-8ライクな書き方でミニゲームが作れます。
+tezukuriretoro.zipでJLCPCBに基板を発注して、パーツを組み合わせ、platformIOでhaco3をインストールすれば、PICO-8ライクな書き方でミニゲームが作れます。
 専用のhaco3editorというソフトも作りました。
 
 
